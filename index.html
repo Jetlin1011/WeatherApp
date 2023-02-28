@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN"
+    crossorigin="anonymous"></script>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
+<link rel="stylesheet" href="./style.css">
+<script src="https://kit.fontawesome.com/848241403b.js" crossorigin="anonymous"></script>
+<link rel="stylesheet" href="style.css">
+</head>
+<body id="body1" class="backbody">
+  <div class="back-img d-flex justify-content-center align-items-center">
+
+    <div class="input-group search-bar2 mb-3 ">
+        <input type="text" placeholder="Enter city" id="place" class="form-control" placeholder="" aria-label="Example text with button addon" aria-describedby="button-addon1">
+        <button class="btn btn-outline-secondary btn-dark" onclick="searchData()" type="button" id="button-addon1"><i class="fa-solid fa-magnifying-glass"></i></button>
+        
+      </div>
+    
+ </div>
+</body>
+
+<script>
+function searchData(){
+  place1=place.value;
+  
+  fetch(`https://api.openweathermap.org/data/2.5/weather?q=${place1}&appid=b41ec3be35c7dac8aabbc21ba253137a`).then(data=>data.json()).then(data=>processData(data)).catch(data=>processone())
+}
+function processData(data1){
+   dtin=data1["dt"];
+   placeName=data1.name;
+   timein=data1.timezone;
+  var sky1=data1.weather[0]["description"];
+  feeltemp=data1.main.feels_like;
+  temp1=data1.main.temp;
+  hightemp=data1.main.temp_max;
+  lowtemp=data1.main.temp_min;
+  windspeed1=data1.wind.speed;
+  humid=data1.main.humidity;
+  countrycod=data1.sys.country;
+iconLink="http://openweathermap.org/img/w/"+data1.weather[0]["code"]+".png";
+  d = new Date()
+localTime = d.getTime()
+localOffset = d.getTimezoneOffset() * 60000
+utc = localTime + localOffset
+var atlanta = utc + (1000 * timein )
+nd = new Date(atlanta)
+// console.log(response.status)
+body1.innerHTML=`
+<div class="back-img2" style="background-image: url('./images/nightcloudy.jpg')">
+
+<div class="row no-gutters mx-0">
+  <div class="col-md-7 col-xs-12 px-0 left-col">
+    <div class="input-group search-bar mb-3 ">
+      <input type="text" placeholder="Enter city" class="form-control"id="place" placeholder="" aria-label="Example text with button addon" aria-describedby="button-addon1">
+      <button class="btn btn-outline-secondary btn-dark" onclick="searchData()" type="button" id="search"><i class="fa-solid fa-magnifying-glass"></i></button>
+
+    </div>
+
+    <div class="main-data text-center ">
+      <div class="temp"><p class="temp-p ">${Math.floor(temp1-273)}&deg</h1></div>
+      <div class="place-date  "><p class="place ">${placeName}</p> 
+      <p class="time-date ">${nd} </p>
+      </div>
+      <div class="cloud ">
+      <p class="cloud-status  ">${sky1}</p>
+      </div>
+    </div>
+
+</div>
+<div class="col-md-5 col-xs-12 title-div right-col ">
+  <p class="title-text">Feels Like: ${Math.floor(feeltemp-273) }&deg <i class="fa-solid fa-temperature-full"></i></p>
+  <p class="title-text">Lowest temperature: ${Math.floor(lowtemp-273)}&deg <i class="fa-solid fa-temperature-full"></i></p>
+  <p class="title-text">Highest temperature: ${Math.floor(hightemp-273)}&deg <i class="fa-solid fa-temperature-full"></i></p>
+  <p class="title-text">Humidity: ${humid} <i class="fa-solid fa-droplet"></i></p>
+  <p class="title-text">Wind speed: ${windspeed1} km/h</p>
+  <p class="title-text">Country code: ${countrycod}</p>
+
+</div>
+</div>
+  
+</div>
+
+
+</div>
+`
+
+}
+
+function processone(){
+alert("Enter a valid city name !")
+  body1.innerHTML=`
+  
+  <div class="back-img d-flex justify-content-center align-items-center">
+
+<div class="input-group search-bar2 mb-3 ">
+    <input type="text" id="place" class="form-control" placeholder="Enter city" aria-label="Example text with button addon" aria-describedby="button-addon1">
+    <button class="btn btn-outline-secondary btn-dark" onclick="searchData()" type="button" id="button-addon1"><i class="fa-solid fa-magnifying-glass"></i></button>
+
+  </div>
+
+
+</div>
+  `
+}
+</script>
+</html>
